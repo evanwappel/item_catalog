@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-10"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Food Truck Menu Application</h1>
+		</div>
+	</div>
+
+<div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+</div>
+
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+		<div class="col-md-10 padding-none">
+			<a href="{{url_for('newFoodTruck')}}">
+				<button class="btn btn-default" id="new-food_truck">
+					<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Food Truck
+				</button>
+			</a>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	{% for food_truck in food_trucks %}
+		<a href = "{{url_for('showMenu', food_truck_id = food_truck.id)}}">
+			<div class="row">
+				<div class="col-md-1"></div>
+					<div class="col-md-10 food_truck-list">
+						<h3>{{food_truck.name}}</h3>
+					</div>
+				<div class="col-md-1"></div>
+			</div>
+		</a>
+	{% endfor %}
+{% endblock %}
