@@ -1,4 +1,4 @@
-# OAuth2.0
+# OAuth2.0 _test_
 Starter Code for Auth&amp;Auth course
 # Installing the Vagrant VM for ud330 - Authentication & Authorization
 
@@ -38,7 +38,7 @@ From the terminal, run:
 
     git clone https://github.com/udacity/OAuth2.0 oauth
 
-This will give you a directory named **oauth** complete with the source code for the flask application, a vagrantfile, and a bootstrap.sh file for installing all of the necessary tools. 
+This will give you a directory named **oauth** complete with the source code for the flask application, a vagrantfile, and a bootstrap.sh file for installing all of the necessary tools.
 
 ## Run the virtual machine!
 
