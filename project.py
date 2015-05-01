@@ -133,15 +133,45 @@ def gconnect():
   output = ''
   output +='<h1>Welcome, '
   output += login_session['username']
-
   output += '!</h1>'
   output += '<img src="'
   output += login_session['picture']
-  output +=' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+  # dimensions of the picture at login:
+  output +=' " style = "width: 300px; height: 300px;border-radius: 50px;-webkit-border-radius: 150px;-moz-border-radius: 50px;"> '
   flash("you are now logged in as %s"%login_session['username'])
   return output
 
 
+#DISCONNECT - Revoke a current user's token and reset their login_session
+@app.route("/gdisconnect")
+def disconnect():
+  # Only disconnect a connected user.
+  credentials = login_session.get('credentials')
+  if credentials is None:
+    response = make_response(json.dumps('Current user not connected.'),401)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+  access_token = credentials.access_token
+  url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' %access_token
+  h = httplib2.Http()
+  result = h.request(url, 'GET')[0]
+
+  if result['status'] == '200':
+    # Reset the user's session.
+    del login_session['credentials']
+    del login_session['gplus_id']
+    del login_session['username']
+    del login_session['email']
+    del login_session['picture']
+
+    response = make_response(json.dumps('Successfully disconnected.'),200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+  else:
+    # For whatever reason, the given token was invalid.
+    response = make_response(json.dumps('Failed to revoke token for given user.'),400)
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
 
 #JSON APIs to view Food Truck Information
@@ -150,7 +180,6 @@ def food_truckMenuJSON(food_truck_id):
     food_truck = session.query(FoodTruck).filter_by(id = food_truck_id).one()
     items = session.query(MenuItem).filter_by(food_truck_id = food_truck_id).all()
     return jsonify(MenuItems=[i.serialize for i in items])
-
 
 @app.route('/food_truck/<int:food_truck_id>/menu/<int:menu_id>/JSON')
 def menuItemJSON(food_truck_id, menu_id):
@@ -175,6 +204,10 @@ def showFoodTrucks():
 def newFoodTruck():
   if request.method == 'POST':
       newFoodTruck = FoodTruck(name = request.form['name'])
+
+      print "login_session[username] when creating new food truck =", login_session['username']
+      print "session.query(User) when creating new food truck =", session.query(User).filter_by(name = login_session['username'])
+
       session.add(newFoodTruck)
       flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
       session.commit()
