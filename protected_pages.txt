@@ -1,0 +1,11 @@
+publicly visible:
+food_trucks.html
+menu.html
+
+restricted access:
+newFoodTruck.html
+editFoodTruck.html
+deleteFoodTruck.html
+newmenuitem.html
+editmenuitem.html
+deletemenuitem.html

@@ -174,6 +174,19 @@ def disconnect():
     return response
 
 
+@app.route("/login_test")
+def login_test():
+  credentials = login_session.get('credentials')
+  if credentials is None:
+    response = make_response(json.dumps('Not logged in.'),200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+  else:
+    response = make_response(json.dumps('Logged in as ' + login_session['username']),200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
 #JSON APIs to view Food Truck Information
 @app.route('/food_truck/<int:food_truck_id>/menu/JSON')
 def food_truckMenuJSON(food_truck_id):
