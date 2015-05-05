@@ -144,7 +144,7 @@ def gconnect():
 
 #DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route("/gdisconnect")
-def disconnect():
+def gdisconnect():
   # Only disconnect a connected user.
   credentials = login_session.get('credentials')
   if credentials is None:
@@ -215,18 +215,20 @@ def showFoodTrucks():
 #Create a new food truck
 @app.route('/food_truck/new/', methods=['GET','POST'])
 def newFoodTruck():
-  if request.method == 'POST':
-      newFoodTruck = FoodTruck(name = request.form['name'])
-
-      print "login_session[username] when creating new food truck =", login_session['username']
-      print "session.query(User) when creating new food truck =", session.query(User).filter_by(name = login_session['username'])
-
-      session.add(newFoodTruck)
-      flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
-      session.commit()
+  credentials = login_session.get('credentials')
+  if credentials is None:
+      flash('You must login to create a food truck')
       return redirect(url_for('showFoodTrucks'))
   else:
-      return render_template('newFoodTruck.html')
+      if request.method == 'POST':
+          db_query = getUserID(login_session['email'])
+          newFoodTruck = FoodTruck(name = request.form['name'], user_id_database=db_query)
+          session.add(newFoodTruck)
+          flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
+          session.commit()
+          return redirect(url_for('showFoodTrucks'))
+      else:
+          return render_template('newFoodTruck.html')
 
 #Edit a food Truck
 @app.route('/food_truck/<int:food_truck_id>/edit/', methods = ['GET', 'POST'])
