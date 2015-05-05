@@ -220,8 +220,8 @@ def newFoodTruck():
         return redirect(url_for('showFoodTrucks'))
     else:
         if request.method == 'POST':
-            db_query = getUserID(login_session['email'])
-            newFoodTruck = FoodTruck(name = request.form['name'], user_id_database=db_query)
+            login_user_id = getUserID(login_session['email'])
+            newFoodTruck = FoodTruck(name = request.form['name'], user_id_database=login_user_id)
             session.add(newFoodTruck)
             flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
             session.commit()
@@ -232,14 +232,20 @@ def newFoodTruck():
 #Edit a food Truck
 @app.route('/food_truck/<int:food_truck_id>/edit/', methods = ['GET', 'POST'])
 def editFoodTruck(food_truck_id):
-  editedFoodTruck = session.query(FoodTruck).filter_by(id = food_truck_id).one()
-  if request.method == 'POST':
-      if request.form['name']:
-        editedFoodTruck.name = request.form['name']
-        flash('Food Truck Successfully Edited %s' % editedFoodTruck.name)
+    credentials = login_session.get('credentials')
+    login_user_id = getUserID(login_session['email'])
+    editedFoodTruck = session.query(FoodTruck).filter_by(id = food_truck_id).one()
+    if editedFoodTruck.user_id_database != login_user_id:
+        flash("You can only edit food trucks you have created.")
         return redirect(url_for('showFoodTrucks'))
-  else:
-    return render_template('editFoodTruck.html', food_truck = editedFoodTruck)
+    else:
+        if request.method == 'POST':
+            if request.form['name']:
+                editedFoodTruck.name = request.form['name']
+                flash('Food Truck Successfully Edited:  %s' % editedFoodTruck.name)
+                return redirect(url_for('showFoodTrucks'))
+        else:
+            return render_template('editFoodTruck.html', food_truck = editedFoodTruck)
 
 
 #Delete a food_truck
