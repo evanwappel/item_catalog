@@ -1,15 +1,35 @@
+
+
 <div class="row top-menu">
+
 	<div class="col-md-6">
 		<a href="{{url_for('showFoodTrucks')}}">
 			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Food Trucks
 		</a>
 	</div>
+
 	<div class="col-md-6 text-right">
 
 
-		<a href="{{url_for('showLogin')}}">
-			<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Login
-			<!--<p>Login Link will go Here</p>-->
-		</a>
+<div>
+
+	{% if login_status=="logged in" %}
+	<a href="{{url_for('gdisconnect')}}">
+		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Logout
+	</a>
+	{% else %}
+	<a href="{{url_for('showLogin')}}">
+		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Login
+	</a>
+
+
+	{% endif %}
+
+
+</div>
+
+
 	</div>
+
+
 </div>

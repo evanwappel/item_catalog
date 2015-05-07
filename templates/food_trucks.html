@@ -42,6 +42,7 @@
 		</div>
 		<div class="col-md-1"></div>
 	</div>
+	
 	{% for food_truck in food_trucks %}
 		<a href = "{{url_for('showMenu', food_truck_id = food_truck.id)}}">
 			<div class="row">

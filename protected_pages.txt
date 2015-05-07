@@ -3,8 +3,8 @@ food_trucks.html
 menu.html
 
 restricted access:
-newFoodTruck.html
-editFoodTruck.html
+newFoodTruck.html (done)
+editFoodTruck.html (done)
 deleteFoodTruck.html
 newmenuitem.html
 editmenuitem.html

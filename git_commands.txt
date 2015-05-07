@@ -1,0 +1,20 @@
+Initial upload of ReadMe file:
+  echo "# item_catalog" >> README.md
+  git init
+  git add README.md
+  git commit -m "first commit"
+  git remote add origin https://github.com/eww125/item_catalog.git
+  git push -u origin master
+
+Upload multiple files:
+  $ git add .
+  $ git commit -am "Your message"
+  git push
+
+Example: add project.py
+  git add project.py
+  git commit -m "add project"
+  git push
+
+
+https://github.com/eww125/item_catalog.git
