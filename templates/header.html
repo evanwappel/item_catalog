@@ -14,8 +14,12 @@
 <div>
 
 	{% if login_status=="logged in" %}
+	<div>
+	Logged in as {{login_username}} {{login_user_id}}
+</div>
 	<a href="{{url_for('gdisconnect')}}">
 		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Logout
+
 	</a>
 	{% else %}
 	<a href="{{url_for('showLogin')}}">
@@ -24,6 +28,7 @@
 
 
 	{% endif %}
+
 
 
 </div>

@@ -176,19 +176,6 @@ def gdisconnect():
         return response
 
 
-@app.route("/login_test")
-def login_test():
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        response = make_response(json.dumps('Not logged in.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    else:
-        response = make_response(json.dumps(
-            'Logged in as ' + login_session['username']
-            ), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
 
 
 # JSON APIs to view Food Truck Information
@@ -219,11 +206,15 @@ def showFoodTrucks():
     food_trucks = session.query(FoodTruck).order_by(asc(FoodTruck.name))
 
     credentials = login_session.get('credentials')
+
     if credentials is None:
         login_status = "not logged in"
+        login_user_id = 0
+        login_username = "no username"
     else:
         login_status = "logged in"
-        #login_user_id = getUserID(login_session['email'])
+        login_user_id = getUserID(login_session['email'])
+        login_username = login_session['username']
     print "login_status:"
     print login_status
 
@@ -231,7 +222,10 @@ def showFoodTrucks():
     return render_template(
         'food_trucks.html',
         food_trucks=food_trucks,
-        login_status=login_status)
+        login_status=login_status,
+        login_user_id=login_user_id,
+        login_username=login_username
+        )
 
 
 # Create a new food truck
