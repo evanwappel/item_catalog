@@ -176,8 +176,6 @@ def gdisconnect():
         return response
 
 
-
-
 # JSON APIs to view Food Truck Information
 @app.route('/food_truck/<int:food_truck_id>/menu/JSON')
 def food_truckMenuJSON(food_truck_id):
@@ -215,9 +213,14 @@ def showFoodTrucks():
         login_status = "logged in"
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
+    print "food_trucks:"
+    print food_trucks
     print "login_status:"
     print login_status
-
+    print "login_user_id:"
+    print login_user_id
+    print "login_username:"
+    print login_username
 
     return render_template(
         'food_trucks.html',
@@ -232,20 +235,20 @@ def showFoodTrucks():
 @app.route('/food_truck/new/', methods=['GET', 'POST'])
 def newFoodTruck():
     credentials = login_session.get('credentials')
-    if credentials is None:
-        flash('You must login to create a food truck')
+    #if credentials is None:
+    #    flash('You must login to create a food truck')
+    #    return redirect(url_for('showFoodTrucks'))
+    #else:
+    if request.method == 'POST':
+        login_user_id = getUserID(login_session['email'])
+        newFoodTruck = FoodTruck(
+            name=request.form['name'], user_id_database=login_user_id)
+        session.add(newFoodTruck)
+        flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
+        session.commit()
         return redirect(url_for('showFoodTrucks'))
     else:
-        if request.method == 'POST':
-            login_user_id = getUserID(login_session['email'])
-            newFoodTruck = FoodTruck(
-                name=request.form['name'], user_id_database=login_user_id)
-            session.add(newFoodTruck)
-            flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
-            session.commit()
-            return redirect(url_for('showFoodTrucks'))
-        else:
-            return render_template('newFoodTruck.html')
+        return render_template('newFoodTruck.html')
 
 
 # Edit a food Truck
@@ -380,7 +383,6 @@ def test_jinja_if():
         login_status = "not logged in"
     else:
         login_status = "logged in"
-        #login_user_id = getUserID(login_session['email'])
     print "login_status:"
     print login_status
     return render_template('test_jinja_if.html', login_status=login_status)

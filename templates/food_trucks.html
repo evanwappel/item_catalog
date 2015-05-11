@@ -31,6 +31,7 @@
 
 </div>
 
+{% if login_status=="logged in" %}
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-none">
@@ -42,7 +43,9 @@
 		</div>
 		<div class="col-md-1"></div>
 	</div>
-	
+	{% endif %}
+
+
 	{% for food_truck in food_trucks %}
 		<a href = "{{url_for('showMenu', food_truck_id = food_truck.id)}}">
 			<div class="row">
