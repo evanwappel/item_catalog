@@ -7,11 +7,15 @@
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
 			<h1>{{ food_truck.name }}
+
+
+
 			<figure class="creator">
 				<img src="{{ url_for('static', filename='blank_user.gif') }}">
-				<figcaption>Menu creator's name goes here</figcaption>
-
+				<figcaption>Menu created by: {{ food_truck.user_id_database }}</figcaption>
 			</figure>
+
+
 			</h1>
 
 		</div>
@@ -28,9 +32,10 @@
         </ul>
         {% endif %}
     {% endwith %}
+			</div>
 
-</div>
-	<div class="row padding-top padding-bottom">
+{% if login_status=="logged in" %}
+<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<a href="{{url_for('editFoodTruck', food_truck_id = food_truck.id )}}">
@@ -51,6 +56,7 @@
 		</div>
 		<div class="col-md-7"></div>
 	</div>
+{% endif %}
 
 	{% if items !=[] %}
 		<div class="row">

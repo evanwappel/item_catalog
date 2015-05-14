@@ -202,7 +202,6 @@ def food_trucksJSON():
 @app.route('/food_truck/')
 def showFoodTrucks():
     food_trucks = session.query(FoodTruck).order_by(asc(FoodTruck.name))
-
     credentials = login_session.get('credentials')
 
     if credentials is None:
@@ -242,7 +241,7 @@ def newFoodTruck():
     if request.method == 'POST':
         login_user_id = getUserID(login_session['email'])
         newFoodTruck = FoodTruck(
-            name=request.form['name'], user_id_database=login_user_id)
+            name=request.form['name'], user_id=login_user_id)
         session.add(newFoodTruck)
         flash('New Food Truck %s Successfully Created' % newFoodTruck.name)
         session.commit()
@@ -258,7 +257,7 @@ def editFoodTruck(food_truck_id):
     login_user_id = getUserID(login_session['email'])
     editedFoodTruck = session.query(FoodTruck).filter_by(
         id=food_truck_id).one()
-    if editedFoodTruck.user_id_database != login_user_id:
+    if editedFoodTruck.user_id != login_user_id:
         flash("You can only edit food trucks you have created.")
         return redirect(url_for('showFoodTrucks'))
     else:
@@ -282,7 +281,7 @@ def deleteFoodTruck(food_truck_id):
     food_truckToDelete = session.query(FoodTruck).filter_by(
         id=food_truck_id).one()
     print "truck:"
-    print food_truckToDelete.user_id_database
+    print food_truckToDelete.user_id
     print "user_id:"
     print login_user_id
 
@@ -306,8 +305,44 @@ def showMenu(food_truck_id):
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
     items = session.query(MenuItem).filter_by(
         food_truck_id=food_truck_id).all()
+
+    # might need a join to get user creator name & picture
+    #menu_creator = session.query(User).join( #User.id==FoodTruck.user_id)
+
+
+    # food_truck_id is known
+    # query food_truck table to get user_id
+    # query user table to get name & picture
+
+    credentials = login_session.get('credentials')
+
+    if credentials is None:
+        login_status = "not logged in"
+        login_user_id = 0
+        login_username = "no username"
+    else:
+        login_status = "logged in"
+        login_user_id = getUserID(login_session['email'])
+        login_username = login_session['username']
+
+    print "login_status:"
+    print login_status
+    print "login_user_id:"
+    print login_user_id
+    print "login_username:"
+    print login_username
+    print "food_truck:"
+    print food_truck
+    print "items:"
+    print items
+
     return render_template(
-        'menu.html', items=items, food_truck=food_truck)
+        'menu.html',
+        items=items,
+        food_truck=food_truck,
+        login_username=login_username,
+        login_status=login_status
+        )
 
 
 # Create a new menu item

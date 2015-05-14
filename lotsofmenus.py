@@ -67,7 +67,7 @@ session.commit()
 
 # Jovencio's food truck (Chairman)
 
-food_truck1 = FoodTruck(name="Jovencio's Food Truck", user_id_database=1)
+food_truck1 = FoodTruck(name="Jovencio's Food Truck", user_id=1)
 session.add(food_truck1)
 session.commit()
 
@@ -75,97 +75,97 @@ menuItem1 = MenuItem(
     name="Tender Pork Belly with Turmeric Pickled Daikon & Green Shiso",
     description="tasty traditional Taiwanese snack",
     price="$3.75", course="Appetizer",
-    food_truck=food_truck1, user_id_database=1)
+    food_truck=food_truck1, user_id=1)
 session.add(menuItem1)
 session.commit()
 
 menuItem2 = MenuItem(
     name="ADOBO",
     description="the chef's famous adobo", price="$8.50",
-    course="Entree", food_truck=food_truck1, user_id_database=1)
+    course="Entree", food_truck=food_truck1, user_id=1)
 session.add(menuItem2)
 session.commit()
 
 menuItem3 = MenuItem(
    name="BUKO PIE", description="coconut pie",
    price="$6", course="Dessert", food_truck=food_truck1,
-   user_id_database=1)
+   user_id=1)
 session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(
     name="ROMBAUER CHARDONNAY", description="premium wine",
     price="$7", course="Beverage", food_truck=food_truck1,
-    user_id_database=1)
+    user_id=1)
 session.add(menuItem4)
 session.commit()
 
 # Leda's food truck (Kogi)
 food_truck2 = FoodTruck(
-    name="Leda's Food Truck", user_id_database=2)
+    name="Leda's Food Truck", user_id=2)
 session.add(food_truck2)
 session.commit()
 
 menuItem1 = MenuItem(
     name="FRESH SPRING ROLLS", description="with peanut sauce",
     price="$4.95", course="Appetizer", food_truck=food_truck2,
-    user_id_database=2)
+    user_id=2)
 session.add(menuItem1)
 session.commit()
 
 menuItem2 = MenuItem(
     name="VERMICELLI NOODLES", description="house special",
     price="$8.95", course="Entree", food_truck=food_truck2,
-    user_id_database=2)
+    user_id=2)
 session.add(menuItem2)
 session.commit()
 
 menuItem3 = MenuItem(
     name="CREME BRULEE", description="with strawberries",
     price="$7", course="Dessert", food_truck=food_truck2,
-    user_id_database=2)
+    user_id=2)
 session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(
     name="GAMAY ROUGE", description="sweet red wine",
     price="$6", course="Beverage", food_truck=food_truck2,
-    user_id_database=2)
+    user_id=2)
 session.add(menuItem4)
 session.commit()
 
 
 # Evan's food truck (Opie's)
 food_truck3 = FoodTruck(
-    name="Evan's Food Truck", user_id_database=3)
+    name="Evan's Food Truck", user_id=3)
 session.add(food_truck3)
 session.commit()
 
 menuItem1 = MenuItem(
     name="NACHOS & SALSA", description="spicy salsa",
     price="$4.50", course="Appetizer", food_truck=food_truck3,
-    user_id_database=3)
+    user_id=3)
 session.add(menuItem1)
 session.commit()
 
 menuItem2 = MenuItem(
     name="ENCHILADAS", description="special sauce",
     price="$7.95", course="Entree", food_truck=food_truck3,
-    user_id_database=3)
+    user_id=3)
 session.add(menuItem2)
 session.commit()
 
 menuItem3 = MenuItem(
     name="CHOCOLATE CAKE", description="with ice cream",
     price="$5", course="Dessert", food_truck=food_truck3,
-    user_id_database=3)
+    user_id=3)
 session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(
     name="MEXICAN HOT CHOCOLATE", description="with cinnamon",
     price="$5", course="Beverage", food_truck=food_truck3,
-    user_id_database=3)
+    user_id=3)
 session.add(menuItem4)
 session.commit()
 
