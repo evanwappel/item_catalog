@@ -10,12 +10,13 @@
 
 
 
-			<figure class="creator">
-								<img src={{ creator_picture }}>
+				<figure class="creator">
+								<img src={{creator_picture}}>
 
 				<figcaption>Menu created by: {{ creator_name }}</figcaption>
 
-			</figure>
+				</figure>
+
 
 
 			</h1>
@@ -36,7 +37,7 @@
     {% endwith %}
 			</div>
 
-{% if login_status=="logged in" %}
+{% if creator_id==login_user_id %}
 <div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">

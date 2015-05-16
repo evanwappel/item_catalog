@@ -349,7 +349,7 @@ def showMenu(food_truck_id):
         'menu.html',items=items,food_truck=food_truck,
         creator_name=creator_name, creator_picture=creator_picture,
         login_status=login_status, login_user_id=login_user_id,
-        login_username=login_username
+        login_username=login_username, creator_id=creator_id
         )
         #login_username=login_username,
         #login_status=login_status
