@@ -8,7 +8,7 @@ Initial upload of ReadMe file:
 
 Upload multiple files:
   $ git add .
-  $ git commit -am "Your message"
+  $ git commit -m "Your message"
   git push
 
 Example: add project.py

@@ -130,6 +130,11 @@ def gconnect():
     output += '<h1>Welcome, '
     output += login_session['username']
     output += '!</h1>'
+
+    output += '<h3>picture url='
+    output += login_session['picture']
+    output += '!</h3>'
+
     output += '<img src="'
     output += login_session['picture']
     # dimensions of the picture at login:
@@ -302,47 +307,51 @@ def deleteFoodTruck(food_truck_id):
 @app.route('/food_truck/<int:food_truck_id>/')
 @app.route('/food_truck/<int:food_truck_id>/menu/')
 def showMenu(food_truck_id):
-    food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
     items = session.query(MenuItem).filter_by(
         food_truck_id=food_truck_id).all()
 
-    # might need a join to get user creator name & picture
-    #menu_creator = session.query(User).join( #User.id==FoodTruck.user_id)
+    food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
+    creator_id = food_truck.user_id
+    print "creator_id="
+    print creator_id
 
+    creator_user = session.query(User).filter_by(id=creator_id).one()
+    creator_name=creator_user.name
+    print "creator_name="
+    print creator_name
+    creator_picture=creator_user.picture
+    print "creator_picture="
+    print creator_picture
 
-    # food_truck_id is known
-    # query food_truck table to get user_id
-    # query user table to get name & picture
-
-    credentials = login_session.get('credentials')
-
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
-
-    print "login_status:"
-    print login_status
-    print "login_user_id:"
-    print login_user_id
-    print "login_username:"
-    print login_username
-    print "food_truck:"
-    print food_truck
-    print "items:"
-    print items
+    # credentials = login_session.get('credentials')
+    #
+    # if credentials is None:
+    #     login_status = "not logged in"
+    #     login_user_id = 0
+    #     login_username = "no username"
+    # else:
+    #     login_status = "logged in"
+    #     login_user_id = getUserID(login_session['email'])
+    #     login_username = login_session['username']
+    #
+    # print "login_status:"
+    # print login_status
+    # print "login_user_id:"
+    # print login_user_id
+    # print "login_username:"
+    # print login_username
+    #print "food_truck:"
+    #print food_truck
+    #print "items:"
+    #print items
 
     return render_template(
-        'menu.html',
-        items=items,
-        food_truck=food_truck,
-        login_username=login_username,
-        login_status=login_status
+        'menu.html',items=items,food_truck=food_truck,
+        creator_name=creator_name, creator_picture=creator_picture
         )
+        #login_username=login_username,
+        #login_status=login_status
+
 
 
 # Create a new menu item
@@ -361,7 +370,7 @@ def newMenuItem(food_truck_id):
         session.commit()
         flash('New Menu %s Item Successfully Created' % (newItem.name))
         return redirect(
-            url_for('showMenu', food_truck_id=food_truck_id))
+            url_for('showMenu', food_truck_id=food_truck_id, user_id=user_id))
     else:
         return render_template(
             'newmenuitem.html', food_truck_id=food_truck_id)
@@ -386,7 +395,7 @@ def editMenuItem(food_truck_id, menu_id):
         session.add(editedItem)
         session.commit()
         flash('Menu Item Successfully Edited')
-        return redirect(url_for('showMenu', food_truck_id=food_truck_id))
+        return redirect(url_for('showMenu', food_truck_id=food_truck_id, user_id=user_id))
     else:
         return render_template(
             'editmenuitem.html',
@@ -406,7 +415,7 @@ def deleteMenuItem(food_truck_id, menu_id):
         session.delete(itemToDelete)
         session.commit()
         flash('Menu Item Successfully Deleted')
-        return redirect(url_for('showMenu', food_truck_id=food_truck_id))
+        return redirect(url_for('showMenu', food_truck_id=food_truck_id, user_id=user_id))
     else:
         return render_template('deleteMenuItem.html', item=itemToDelete)
 

@@ -11,8 +11,10 @@
 
 
 			<figure class="creator">
-				<img src="{{ url_for('static', filename='blank_user.gif') }}">
-				<figcaption>Menu created by: {{ food_truck.user_id_database }}</figcaption>
+								<img src={{ creator_picture }}>
+
+				<figcaption>Menu created by: {{ creator_name }}</figcaption>
+
 			</figure>
 
 

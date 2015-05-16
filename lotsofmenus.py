@@ -42,8 +42,8 @@ user1 = User(
     name="Jovencio Rabe",
     email="jovenciorabe@gmail.com",
     picture="https://lh3.googleusercontent.com/\
-        -XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/\
-        4252rscbv5M/photo.jpg")
+-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/\
+4252rscbv5M/photo.jpg")
 session.add(user1)
 session.commit()
 
@@ -51,8 +51,8 @@ user2 = User(
     name="Ana Leda Rabe",
     email="analeda13460@gmail.com",
     picture="https://lh3.googleusercontent.com/\
-    -XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/\
-    4252rscbv5M/photo.jpg")
+-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/\
+4252rscbv5M/photo.jpg")
 session.add(user2)
 session.commit()
 
@@ -60,14 +60,23 @@ user3 = User(
     name="Evan Wappel",
     email="ewappel@gmail.com",
     picture="https://lh3.googleusercontent.com/\
-    -XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/\
-    4252rscbv5M/photo.jpg")
+-ndvjs1Gb1kg/AAAAAAAAAAI/AAAAAAAAAz0/b9l4UmgsXOw/photo.jpg")
+
+
 session.add(user3)
 session.commit()
 
+user4 = User(
+    name="Jon Favreau",
+    email="jon_favreau@gmail.com",
+    picture="https://nyppagesix.files.wordpress.com/2014/03/sxsw.jpg?w=720&h=480&crop=1")
+session.add(user4)
+session.commit()
+
+
 # Jovencio's food truck (Chairman)
 
-food_truck1 = FoodTruck(name="Jovencio's Food Truck", user_id=1)
+food_truck1 = FoodTruck(name="El Jefe", user_id=4)
 session.add(food_truck1)
 session.commit()
 
@@ -75,28 +84,28 @@ menuItem1 = MenuItem(
     name="Tender Pork Belly with Turmeric Pickled Daikon & Green Shiso",
     description="tasty traditional Taiwanese snack",
     price="$3.75", course="Appetizer",
-    food_truck=food_truck1, user_id=1)
+    food_truck=food_truck1, user_id=4)
 session.add(menuItem1)
 session.commit()
 
 menuItem2 = MenuItem(
     name="ADOBO",
     description="the chef's famous adobo", price="$8.50",
-    course="Entree", food_truck=food_truck1, user_id=1)
+    course="Entree", food_truck=food_truck1, user_id=4)
 session.add(menuItem2)
 session.commit()
 
 menuItem3 = MenuItem(
    name="BUKO PIE", description="coconut pie",
    price="$6", course="Dessert", food_truck=food_truck1,
-   user_id=1)
+   user_id=4)
 session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(
     name="ROMBAUER CHARDONNAY", description="premium wine",
     price="$7", course="Beverage", food_truck=food_truck1,
-    user_id=1)
+    user_id=4)
 session.add(menuItem4)
 session.commit()
 
@@ -172,26 +181,26 @@ session.commit()
 
 #  Example food truck (El Jefe)
 
-food_truck4 = FoodTruck(name = "El Jefe")
+food_truck4 = FoodTruck(name = "Jovencio's Food Truck", user_id=1)
 session.add(food_truck4)
 session.commit()
 
 menuItem1 = MenuItem(
     name="CALAMARI", description="with garlic and parmesan",
     price="$4.95", course="Appetizer",
-    food_truck=food_truck4)
+    food_truck=food_truck4, user_id=1)
 session.add(menuItem1)
 session.commit()
 
-menuItem2 = MenuItem(name = "ADOBO", description = "the chef's famous adobo", price = "$8.50", course = "Entree", food_truck = food_truck4)
+menuItem2 = MenuItem(name = "ADOBO", description = "the chef's famous adobo", price = "$8.50", course = "Entree", food_truck = food_truck4, user_id=1)
 session.add(menuItem2)
 session.commit()
 
-menuItem3 = MenuItem(name = "BUKO PIE", description = "coconut pie", price = "$6", course = "Dessert", food_truck = food_truck4)
+menuItem3 = MenuItem(name = "BUKO PIE", description = "coconut pie", price = "$6", course = "Dessert", food_truck = food_truck4, user_id=1)
 session.add(menuItem3)
 session.commit()
 
-menuItem4 = MenuItem(name = "ROMBAUER CHARDONNAY", description = "premium wine", price = "$7", course = "Beverage", food_truck = food_truck4)
+menuItem4 = MenuItem(name = "ROMBAUER CHARDONNAY", description = "premium wine", price = "$7", course = "Beverage", food_truck = food_truck4, user_id=1)
 session.add(menuItem4)
 session.commit()
 
