@@ -207,8 +207,8 @@ def food_trucksJSON():
 @app.route('/food_truck/')
 def showFoodTrucks():
     food_trucks = session.query(FoodTruck).order_by(asc(FoodTruck.name))
-    credentials = login_session.get('credentials')
 
+    credentials = login_session.get('credentials')
     if credentials is None:
         login_status = "not logged in"
         login_user_id = 0
@@ -217,14 +217,14 @@ def showFoodTrucks():
         login_status = "logged in"
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
-    print "food_trucks:"
-    print food_trucks
-    print "login_status:"
-    print login_status
-    print "login_user_id:"
-    print login_user_id
-    print "login_username:"
-    print login_username
+    # print "food_trucks:"
+    # print food_trucks
+    # print "login_status:"
+    # print login_status
+    # print "login_user_id:"
+    # print login_user_id
+    # print "login_username:"
+    # print login_username
 
     return render_template(
         'food_trucks.html',
@@ -323,16 +323,16 @@ def showMenu(food_truck_id):
     print "creator_picture="
     print creator_picture
 
-    # credentials = login_session.get('credentials')
-    #
-    # if credentials is None:
-    #     login_status = "not logged in"
-    #     login_user_id = 0
-    #     login_username = "no username"
-    # else:
-    #     login_status = "logged in"
-    #     login_user_id = getUserID(login_session['email'])
-    #     login_username = login_session['username']
+    credentials = login_session.get('credentials')
+
+    if credentials is None:
+        login_status = "not logged in"
+        login_user_id = 0
+        login_username = "no username"
+    else:
+        login_status = "logged in"
+        login_user_id = getUserID(login_session['email'])
+        login_username = login_session['username']
     #
     # print "login_status:"
     # print login_status
@@ -347,7 +347,9 @@ def showMenu(food_truck_id):
 
     return render_template(
         'menu.html',items=items,food_truck=food_truck,
-        creator_name=creator_name, creator_picture=creator_picture
+        creator_name=creator_name, creator_picture=creator_picture,
+        login_status=login_status, login_user_id=login_user_id,
+        login_username=login_username
         )
         #login_username=login_username,
         #login_status=login_status
