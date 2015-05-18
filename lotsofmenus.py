@@ -67,47 +67,65 @@ session.add(user3)
 session.commit()
 
 user4 = User(
-    name="Jon Favreau",
-    email="jon_favreau@gmail.com",
-    picture="https://nyppagesix.files.wordpress.com/2014/03/sxsw.jpg?w=720&h=480&crop=1")
+    name="Roy Choi",
+    email="roy_choi@gmail.com",
+    picture="http://www.sfstation.com/wp-content/uploads/2013/11/roy-choi-riding-shotgun-la-son.jpg")
 session.add(user4)
 session.commit()
 
 
-# Jovencio's food truck (Chairman)
+# El Jefe
 
 food_truck1 = FoodTruck(name="El Jefe", user_id=4)
 session.add(food_truck1)
 session.commit()
 
 menuItem1 = MenuItem(
-    name="Tender Pork Belly with Turmeric Pickled Daikon & Green Shiso",
-    description="tasty traditional Taiwanese snack",
-    price="$3.75", course="Appetizer",
+    name="Mojo Pork Cubanos",
+    description="delectable Cuban-inspired variation on the classic ham and cheese sandwich",
+    price="$10", course="Entree",
     food_truck=food_truck1, user_id=4)
 session.add(menuItem1)
 session.commit()
 
 menuItem2 = MenuItem(
-    name="ADOBO",
-    description="the chef's famous adobo", price="$8.50",
+    name="Mojo Marinated Pork Shoulder",
+    description="immersed in a marinade of garlic, citrus and herbs", price="$10",
     course="Entree", food_truck=food_truck1, user_id=4)
 session.add(menuItem2)
 session.commit()
 
 menuItem3 = MenuItem(
-   name="BUKO PIE", description="coconut pie",
-   price="$6", course="Dessert", food_truck=food_truck1,
+   name="Tostones with Chile Vinegar",
+   description="fried plantain slices",
+   price="$6", course="Appetizer", food_truck=food_truck1,
    user_id=4)
 session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(
-    name="ROMBAUER CHARDONNAY", description="premium wine",
-    price="$7", course="Beverage", food_truck=food_truck1,
+    name="Berries in Cream", description=" super-sweet recipe for berries with cream",
+    price="$7", course="Dessert", food_truck=food_truck1,
     user_id=4)
 session.add(menuItem4)
 session.commit()
+
+menuItem5 = MenuItem(
+    name="Yucca Fries with Banana Ketchup",
+    description="ripened bananas that are peeled and chopped",
+    price="$7", course="Appetizer", food_truck=food_truck1,
+    user_id=4)
+session.add(menuItem5)
+session.commit()
+
+menuItem6 = MenuItem(
+    name="Pasta Aglio E Olio",
+    description="spaghetti and plantains",
+    price="$7", course="Appetizer", food_truck=food_truck1,
+    user_id=4)
+session.add(menuItem6)
+session.commit()
+
 
 # Leda's food truck (Kogi)
 food_truck2 = FoodTruck(
