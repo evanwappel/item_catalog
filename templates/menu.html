@@ -72,8 +72,12 @@
 								<h3>{{i.name}}</h3>
 								<p>{{i.description}}</p>
 								<p class="menu-price">{{i.price}}</p>
+
+								{% if creator_id==login_user_id %}
 								<a href='{{url_for('editMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Edit</a> |
 								<a href='{{url_for('deleteMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Delete</a>
+								{% endif %}
+
 							</div>
 						{% endif %}
 					{% endfor %}
@@ -86,8 +90,12 @@
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
+
+							{% if creator_id==login_user_id %}
 							<a href='{{url_for('editMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Edit</a> |
 							<a href='{{url_for('deleteMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Delete</a>
+							{% endif %}
+
 						</div>
 						{% endif %}
 					{% endfor %}
@@ -100,8 +108,12 @@
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
+
+							{% if creator_id==login_user_id %}
 							<a href='{{url_for('editMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Edit</a> |
 							<a href='{{url_for('deleteMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Delete</a>
+							{% endif %}
+
 						</div>
 						{% endif %}
 					{% endfor %}
@@ -112,8 +124,12 @@
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
+
+							{% if creator_id==login_user_id %}
 							<a href='{{url_for('editMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Edit</a> |
 							<a href='{{url_for('deleteMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Delete</a>
+							{% endif %}
+
 						</div>
 						{% endif %}
 					{% endfor %}
