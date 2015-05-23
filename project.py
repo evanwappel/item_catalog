@@ -368,8 +368,12 @@ def newMenuItem(food_truck_id):
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/edit',
     methods=['GET', 'POST'])
 def editMenuItem(food_truck_id, menu_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
+    if login_session['user_id'] != food_truck.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -382,13 +386,9 @@ def editMenuItem(food_truck_id, menu_id):
         session.add(editedItem)
         session.commit()
         flash('Menu Item Successfully Edited')
-        return redirect(url_for('showMenu', food_truck_id=food_truck_id, user_id=user_id))
+        return redirect(url_for('showMenu', food_truck_id=food_truck_id))
     else:
-        return render_template(
-            'editmenuitem.html',
-            food_truck_id=food_truck_id,
-            menu_id=menu_id,
-            item=editedItem)
+        return render_template('editmenuitem.html', food_truck_id=food_truck_id, menu_id=menu_id, item=editedItem)
 
 
 # Delete a menu item
