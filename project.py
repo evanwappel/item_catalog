@@ -262,21 +262,17 @@ def editFoodTruck(food_truck_id):
     login_user_id = getUserID(login_session['email'])
     editedFoodTruck = session.query(FoodTruck).filter_by(
         id=food_truck_id).one()
-    if editedFoodTruck.user_id != login_user_id:
-        flash("You can only edit food trucks you have created.")
-        return redirect(url_for('showFoodTrucks'))
+    if 'username' not in login_session:
+        return redirect('/login')
+    if editedFoodTruck.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit this food truck. Please create your own food truck in order to edit.');}</script><body onload='myFunction()''>"
+    if request.method == 'POST':
+        if request.form['name']:
+            editedFoodTruck.name = request.form['name']
+            flash('Food Truck Successfully Edited %s' % editedFoodTruck.name)
+            return redirect(url_for('showFoodTrucks'))
     else:
-        if request.method == 'POST':
-            if request.form['name']:
-                editedFoodTruck.name = request.form['name']
-                flash(
-                    'Food Truck Successfully Edited: %s'
-                    % editedFoodTruck.name)
-                return redirect(url_for('showFoodTrucks'))
-        else:
-            return render_template(
-                'editFoodTruck.html', food_truck=editedFoodTruck)
-
+        return render_template('editFoodTruck.html', food_truck=editedFoodTruck)
 
 # Delete a food_truck
 @app.route('/food_truck/<int:food_truck_id>/delete/', methods=['GET', 'POST'])
@@ -333,17 +329,7 @@ def showMenu(food_truck_id):
         login_status = "logged in"
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
-    #
-    # print "login_status:"
-    # print login_status
-    # print "login_user_id:"
-    # print login_user_id
-    # print "login_username:"
-    # print login_username
-    #print "food_truck:"
-    #print food_truck
-    #print "items:"
-    #print items
+
 
     return render_template(
         'menu.html',items=items,food_truck=food_truck,
@@ -351,8 +337,7 @@ def showMenu(food_truck_id):
         login_status=login_status, login_user_id=login_user_id,
         login_username=login_username, creator_id=creator_id
         )
-        #login_username=login_username,
-        #login_status=login_status
+
 
 
 

@@ -1,3 +1,9 @@
+body {
+    background-color: grey;
+}
+
+
+
 * {
 	font-family: "Helvetica Neue Bold", Roboto, Helvetica, Arial, sans-serif;
 	font-weight: 700;
@@ -100,12 +106,15 @@ h3 {
 .divider.green {
 	background-color: yellow;
 }
+/* home page banner */
 .banner.main {
 	height: 180px;
 	background: url("/static/food_truck_small.png");
 	background-position: right;
 	background-repeat: no-repeat;
 	background-size: 209px 150px;
+	background-color: yellow;
+}
 }
 /* food truck banner */
 .banner.menu {
@@ -143,14 +152,13 @@ u }
 }
 .creator {
 	padding-right: 20px;
-	margin-top: 0px;
-	text-align: center;
+	margin-top: -20px;
+	text-align: right;
 	float:right;
 }
 .creator img {
-	width: 120px;
-	height: 80px;
-	border-radius: 10%;
+	width: 100px;
+	border-radius: 50%;
 }
 .creator figcaption {
 	font-size: 14px;
