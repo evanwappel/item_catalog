@@ -217,14 +217,7 @@ def showFoodTrucks():
         login_status = "logged in"
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
-    # print "food_trucks:"
-    # print food_trucks
-    # print "login_status:"
-    # print login_status
-    # print "login_user_id:"
-    # print login_user_id
-    # print "login_username:"
-    # print login_username
+
 
     return render_template(
         'food_trucks.html',
@@ -239,10 +232,7 @@ def showFoodTrucks():
 @app.route('/food_truck/new/', methods=['GET', 'POST'])
 def newFoodTruck():
     credentials = login_session.get('credentials')
-    #if credentials is None:
-    #    flash('You must login to create a food truck')
-    #    return redirect(url_for('showFoodTrucks'))
-    #else:
+
     if request.method == 'POST':
         login_user_id = getUserID(login_session['email'])
         newFoodTruck = FoodTruck(
@@ -293,8 +283,8 @@ def deleteFoodTruck(food_truck_id):
         return redirect(url_for(
             'showFoodTrucks', food_truck_id=food_truck_id))
     else:
-        # return render_template(
-        # 'deleteFoodTruck.html',food_truck = food_truckToDelete)
+        return render_template(
+        'deleteFoodTruck.html',food_truck = food_truckToDelete)
         return redirect(url_for(
             'showFoodTrucks', food_truck_id=food_truck_id))
 
@@ -396,8 +386,10 @@ def editMenuItem(food_truck_id, menu_id):
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/delete',
     methods=['GET', 'POST'])
 def deleteMenuItem(food_truck_id, menu_id):
+
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
