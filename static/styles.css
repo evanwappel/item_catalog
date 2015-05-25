@@ -1,7 +1,6 @@
 body {
-    background-color: grey;
+    background-color: #ECB252;
 }
-
 
 
 * {
@@ -115,18 +114,18 @@ h3 {
 	background-size: 209px 150px;
 	background-color: yellow;
 }
-}
-/* food truck banner */
+
+/* menu item banner */
 .banner.menu {
 	height: 150px;
-	background-color: #DE3329;
+	background-color: #F8E34A;
 }
 /* not sure what this is */
 .banner.profile {
 	height: 150px;
-	background-color: black;
+	background-color: red;
 }
-/* food truck bane vertical position */
+/* food truck banner vertical position */
 .banner h1 {
 	margin: 45px 10;
 }
@@ -137,7 +136,7 @@ h3 {
 u }
 /* hover: main page background for food truck names */
  .food_truck-list:hover {
- 	background-color: green;
+ 	background-color: #00B4A8;
  	padding: 20px;
 }
 /* menu item background */

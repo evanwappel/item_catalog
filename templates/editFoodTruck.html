@@ -4,26 +4,40 @@
 	<div class="row divider green">
 		<div class="col-md-12"></div>
 	</div>
+
+
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
 			<h1>Edit {{food_truck.name}}</h1>
 		</div>
 	</div>
+
+
 	<div class="row">
 		<div class="col-md-6 col-md-offset-1 padding-top">
+
+
+			<a href = '{{url_for('showMenu',food_truck_id = food_truck.id)}}'>
+			<button class="btn btn-default-delete" >
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+			</a>
+
+			
 			<form action="{{ url_for('editFoodTruck',food_truck_id = food_truck.id)}}" method = "post">
 				<div class="form-group">
 					<label for="name">Name:</label>
 					<input type ="text" class="form-control" name="name" value="{{food_truck.name }}">
 					<div class="padding-bottom"></div>
+
 					<button type="submit" class="btn btn-default" id="submit" type="submit">
 					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save</button>
-					<a href = '{{url_for('showFoodTrucks')}}'>
-						<button class="btn btn-default delete">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
-					</a>
+				</form>
+
+
+
+
 				</div>
-			</form>
+
 		</div>
 	</div>
-{% endblock %}
+{% endblock %} -->

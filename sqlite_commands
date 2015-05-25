@@ -1,0 +1,10 @@
+sqlite3
+.open food_truck_database.db
+.header on
+.mode column
+.table
+.width 10 30 10
+select * from food_truck;
+.width 10 20 20
+select * from menu_item;
+select * from user;

@@ -162,7 +162,7 @@ session.add(menuItem4)
 session.commit()
 
 
-# Evan's food truck (Opie's)
+# Evan's food truck
 food_truck3 = FoodTruck(
     name="Evan's Food Truck", user_id=3)
 session.add(food_truck3)
@@ -197,7 +197,7 @@ session.add(menuItem4)
 session.commit()
 
 
-#  Example food truck (El Jefe)
+#  Jovencio's Food Truck
 
 food_truck4 = FoodTruck(name = "Jovencio's Food Truck", user_id=1)
 session.add(food_truck4)
