@@ -396,7 +396,7 @@ def newMenuItem(food_truck_id):
         session.commit()
         flash('New Menu %s Item Successfully Created' % (newItem.name))
         return redirect(
-            url_for('showMenu', food_truck_id=food_truck_id, user_id=user_id))
+            url_for('showMenu', food_truck_id=food_truck_id, login_user_id=login_user_id))
     else:
         return render_template(
             'newmenuitem.html',
@@ -455,25 +455,38 @@ def editMenuItem(food_truck_id, menu_id):
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/delete',
     methods=['GET', 'POST'])
 def deleteMenuItem(food_truck_id, menu_id):
-    print "food_truck_id="
-    print food_truck_id
+    credentials = login_session.get('credentials')
+    if credentials is None:
+        login_status = "not logged in"
+        login_user_id = 0
+        login_username = "no username"
+    else:
+        login_status = "logged in"
+        login_user_id = getUserID(login_session['email'])
+        login_username = login_session['username']
+
     print "menu_id="
     print menu_id
-
-    credentials = login_session.get('credentials')
-    user_id = getUserID(login_session['email'])
-    print "user_id="
-    print user_id
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
+    print "food_truck="
+    print food_truck
+
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+    print "itemToDelete="
+    print itemToDelete
 
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         flash('Menu Item Successfully Deleted')
-        return redirect(url_for('showMenu', food_truck_id=food_truck_id, user_id=user_id))
+        return redirect(url_for('showMenu',
+        food_truck_id=food_truck_id))
     else:
-        return render_template('deleteMenuItem.html', item=itemToDelete)
+        return render_template('deleteMenuItem.html',
+        item=itemToDelete,
+        login_status=login_status,
+        login_username=login_username,
+        food_truck=food_truck)
 
 
 @app.route('/test_jinja_if')
