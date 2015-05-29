@@ -80,7 +80,7 @@ function signInCallback(authResult) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=1571731149742371";
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
   // Here we run a very simple test of the Graph API after login is
@@ -118,15 +118,22 @@ function signInCallback(authResult) {
 
 <button>
 
+<fb:login-button
 
-          <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+scope="public_profile,email"
+onlogin="sendTokenToServer();">
 <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
+
+
 
 </fb:login-button>
 
+</button>
 
-        </button>
+
+
 <!--END FACEBOOK SIGN IN -->
+
 
   </body>
 

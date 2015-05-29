@@ -449,10 +449,13 @@ def showMenu(food_truck_id):
 
 
 # Create a new menu item
-@app.route(
-    '/food_truck/<int:food_truck_id>/menu/new/', methods=['GET', 'POST'])
+
+@app.route('/food_truck/<int:food_truck_id>/menu/new/', methods=['GET', 'POST'])
 def newMenuItem(food_truck_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
+
     credentials = login_session.get('credentials')
     if credentials is None:
         login_status = "not logged in"
@@ -463,24 +466,24 @@ def newMenuItem(food_truck_id):
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
 
+    if login_session['user_id'] != food_truck.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to add menu items to this food truck. Please create your own food truck in order to add items.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        newItem = MenuItem(
-            name=request.form['name'],
-            description=request.form['description'],
-            price=request.form['price'],
-            course=request.form['course'],
-            food_truck_id=food_truck_id)
+        newItem = MenuItem(name=request.form['name'], description=request.form['description'], price=request.form[
+                           'price'], course=request.form['course'], food_truck_id=food_truck_id, user_id=food_truck.user_id)
         session.add(newItem)
         session.commit()
         flash('New Menu %s Item Successfully Created' % (newItem.name))
-        return redirect(
-            url_for('showMenu', food_truck_id=food_truck_id, login_user_id=login_user_id))
+        return redirect(url_for('showMenu',
+        food_truck_id=food_truck_id,
+        login_status=login_status,
+        login_username=login_username
+        ))
     else:
-        return render_template(
-            'newmenuitem.html',
-            food_truck_id=food_truck_id,
-            login_status=login_status,
-            login_username=login_username)
+        return render_template('newmenuitem.html',
+        food_truck_id=food_truck_id,
+        login_status=login_status,
+        login_username=login_username)
 
 
 # Edit a menu item

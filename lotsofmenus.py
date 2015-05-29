@@ -61,8 +61,6 @@ user3 = User(
     email="ewappel@gmail.com",
     picture="https://lh3.googleusercontent.com/\
 -ndvjs1Gb1kg/AAAAAAAAAAI/AAAAAAAAAz0/b9l4UmgsXOw/photo.jpg")
-
-
 session.add(user3)
 session.commit()
 
@@ -221,6 +219,7 @@ session.commit()
 menuItem4 = MenuItem(name = "ROMBAUER CHARDONNAY", description = "premium wine", price = "$7", course = "Beverage", food_truck = food_truck4, user_id=1)
 session.add(menuItem4)
 session.commit()
+
 
 
 
