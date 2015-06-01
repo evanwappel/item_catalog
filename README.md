@@ -39,13 +39,13 @@ Vagrant is the software that configures the VM and lets you share files between 
 
 From the terminal, run:
 
-    git clone https://github.com/udacity/OAuth2.0 oauth
+    git clone https://github.com/evanwappel/item_catalog
 
-This will give you a directory named **oauth** complete with the source code for the flask application, a vagrantfile, and a bootstrap.sh file for installing all of the necessary tools.
+This will give you a directory named **item_catalog** complete with the source code for the flask application, a vagrantfile, and a bootstrap.sh file for installing all of the necessary tools.
 
 ## Run the virtual machine!
 
-Using the terminal, change directory to oauth (**cd oauth**), then type **vagrant up** to launch your virtual machine.
+Using the terminal, change directory to item_catalog (**cd item_catalog**), then type **vagrant up** to launch your virtual machine.
 
 
 ## Running the Food Truck Menu App
@@ -58,7 +58,6 @@ Type **ls** to ensure that you are inside the directory that contains project.py
 
 Now type **python database_setup.py** to initialize the database.
 
-Type **python lotsofmenus.py** to populate the database with restaurants and menu items. (Optional)
+Type **python lotsofmenus.py** to populate the database with food trucks and menu items. (Optional)
 
-Type **python project.py** to run the Flask web server. In your browser visit **http://localhost:5000** to view the restaurant menu app.  You should be able to view, add, edit, and delete menu items and restaurants.
-# item_catalog
+Type **python project.py** to run the Flask web server. In your browser visit **http://localhost:5000** to view the food truck menu app.  You should be able to view, add, edit, and delete menu items and food trucks.
