@@ -1,4 +1,7 @@
-# OAuth2.0 _test_
+# Udacity Fullstack Web Developer
+# Project 3
+# Item Catalog
+
 Starter Code for Auth&amp;Auth course
 # Installing the Vagrant VM for ud330 - Authentication & Authorization
 

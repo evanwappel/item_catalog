@@ -38,85 +38,6 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-@app.route('/fbconnect', methods=['POST'])
-def fbconnect():
-    if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid state parameter.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    access_token = request.data
-    print "access token received %s " % access_token
-
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
-        'web']['app_id']
-    app_secret = json.loads(
-        open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-        app_id, app_secret, access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-
-    # Use token to get user info from API
-    userinfo_url = "https://graph.facebook.com/v2.2/me"
-    # strip expire tag from access token
-    token = result.split("&")[0]
-
-
-    url = 'https://graph.facebook.com/v2.2/me?%s' % token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-    # print "url sent for API access:%s"% url
-    # print "API JSON result: %s" % result
-    data = json.loads(result)
-    login_session['provider'] = 'facebook'
-    login_session['username'] = data["name"]
-    login_session['email'] = data["email"]
-    login_session['facebook_id'] = data["id"]
-
-    # The token must be stored in the login_session in order to properly logout, let's strip out the information before the equals sign in our token
-    stored_token = token.split("=")[1]
-    login_session['access_token'] = stored_token
-
-    # Get user picture
-    url = 'https://graph.facebook.com/v2.2/me/picture?%s&redirect=0&height=200&width=200' % token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-    data = json.loads(result)
-
-    login_session['picture'] = data["data"]["url"]
-
-    # see if user exists
-    user_id = getUserID(login_session['email'])
-    if not user_id:
-        user_id = createUser(login_session)
-    login_session['user_id'] = user_id
-
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += ' " style = "width: 100px; height: 100px;border-radius: 50px;-webkit-border-radius: 50px;-moz-border-radius: 50px;"> '
-
-
-    flash("Now logged in as %s" % login_session['username'])
-    return output
-
-
-@app.route('/fbdisconnect')
-def fbdisconnect():
-    facebook_id = login_session['facebook_id']
-    # The access token must me included to successfully logout
-    access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions' % (facebook_id,access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
-    return "you have been logged out"
-
-
-
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     print 'received state of %s' % request.args.get('state')
@@ -212,7 +133,10 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 100px; height: 100px;border-radius: 50px;-webkit-border-radius: 50px;-moz-border-radius: 50px;"> '
+    output += ' " style = "width: 100px; height: \
+        100px;border-radius: 50px;\
+        -webkit-border-radius:\
+        50px;-moz-border-radius: 50px;"> '
 
     flash("you are now logged in as %s" % login_session['username'])
     return output
@@ -290,7 +214,6 @@ def showFoodTrucks():
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
 
-
     return render_template(
         'food_trucks.html',
         food_trucks=food_trucks,
@@ -324,9 +247,10 @@ def newFoodTruck():
         session.commit()
         return redirect(url_for('showFoodTrucks'))
     else:
-        return render_template('newFoodTruck.html',
-        login_username=login_username,
-        login_status=login_status)
+        return render_template(
+            'newFoodTruck.html',
+            login_username=login_username,
+            login_status=login_status)
 
 
 # Edit a food Truck
@@ -342,28 +266,33 @@ def editFoodTruck(food_truck_id):
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
 
-
     editedFoodTruck = session.query(FoodTruck).filter_by(
         id=food_truck_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     if editedFoodTruck.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to edit this food truck. Please create your own food truck in order to edit.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() \
+            {alert('You are not authorized to \
+            edit this food truck. Please create \
+            your own food truck in order to edit.');}\
+            </script><body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form['name']:
             editedFoodTruck.name = request.form['name']
             flash('Food Truck Successfully Edited %s' % editedFoodTruck.name)
-            session.add(editedFoodTruck) #added
-            session.commit() #added
+            session.add(editedFoodTruck)
+            session.commit()
             print "this loop"
             print "request.form['name']="
             print request.form['name']
             return redirect(url_for('showFoodTrucks'))
     else:
-        return render_template('editFoodTruck.html',
-        food_truck=editedFoodTruck,
-        login_username=login_username,
-        login_status=login_status)
+        return render_template(
+            'editFoodTruck.html',
+            food_truck=editedFoodTruck,
+            login_username=login_username,
+            login_status=login_status)
+
 
 # Delete a food_truck
 @app.route('/food_truck/<int:food_truck_id>/delete/', methods=['GET', 'POST'])
@@ -393,11 +322,13 @@ def deleteFoodTruck(food_truck_id):
             'showFoodTrucks', food_truck_id=food_truck_id))
     else:
         return render_template(
-        'deleteFoodTruck.html',
-        food_truck = food_truckToDelete,
-        login_status=login_status,
-        login_username=login_username)
-        return redirect(url_for('showFoodTrucks', food_truck_id=food_truck_id))
+            'deleteFoodTruck.html',
+            food_truck=food_truckToDelete,
+            login_status=login_status,
+            login_username=login_username)
+        return redirect(url_for(
+            'showFoodTrucks',
+            food_truck_id=food_truck_id))
 
 
 # Show a food_truck menu
@@ -413,10 +344,10 @@ def showMenu(food_truck_id):
     print creator_id
 
     creator_user = session.query(User).filter_by(id=creator_id).one()
-    creator_name=creator_user.name
+    creator_name = creator_user.name
     print "creator_name="
     print creator_name
-    creator_picture=creator_user.picture
+    creator_picture = creator_user.picture
     print "creator_picture="
     print creator_picture
 
@@ -431,20 +362,19 @@ def showMenu(food_truck_id):
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
 
-
     return render_template(
-        'menu.html',items=items,food_truck=food_truck,
+        'menu.html', items=items, food_truck=food_truck,
         creator_name=creator_name, creator_picture=creator_picture,
         login_status=login_status, login_user_id=login_user_id,
         login_username=login_username, creator_id=creator_id
         )
 
-
-
-
 # Create a new menu item
 
-@app.route('/food_truck/<int:food_truck_id>/menu/new/', methods=['GET', 'POST'])
+
+@app.route(
+    '/food_truck/<int:food_truck_id>/menu/new/',
+    methods=['GET', 'POST'])
 def newMenuItem(food_truck_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -461,26 +391,36 @@ def newMenuItem(food_truck_id):
         login_username = login_session['username']
 
     if login_session['user_id'] != food_truck.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to add menu items to this food truck. Please create your own food truck in order to add items.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert( \
+        'You are not authorized to add menu items to this \
+        food truck. Please create your own food truck in \
+        order to add items.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        newItem = MenuItem(name=request.form['name'], description=request.form['description'], price=request.form[
-                           'price'], course=request.form['course'], food_truck_id=food_truck_id, user_id=food_truck.user_id)
+        newItem = MenuItem(
+            name=request.form['name'],
+            description=request.form['description'],
+            price=request.form['price'],
+            course=request.form['course'],
+            food_truck_id=food_truck_id,
+            user_id=food_truck.user_id)
         session.add(newItem)
         session.commit()
         flash('New Menu %s Item Successfully Created' % (newItem.name))
-        return redirect(url_for('showMenu',
-        food_truck_id=food_truck_id,
-        login_status=login_status,
-        login_username=login_username
-        ))
+        return redirect(url_for(
+            'showMenu',
+            food_truck_id=food_truck_id,
+            login_status=login_status,
+            login_username=login_username))
     else:
-        return render_template('newmenuitem.html',
-        food_truck_id=food_truck_id,
-        login_status=login_status,
-        login_username=login_username)
-
+        return render_template(
+            'newmenuitem.html',
+            food_truck_id=food_truck_id,
+            login_status=login_status,
+            login_username=login_username)
 
 # Edit a menu item
+
+
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/edit',
     methods=['GET', 'POST'])
@@ -499,7 +439,11 @@ def editMenuItem(food_truck_id, menu_id):
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
     if login_session['user_id'] != food_truck.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert(\
+        'You are not authorized to edit menu items to\
+        this restaurant. Please create your own restaurant\
+        in order to edit items.');}</script>\
+        <body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -512,20 +456,23 @@ def editMenuItem(food_truck_id, menu_id):
         session.add(editedItem)
         session.commit()
         flash('Menu Item Successfully Edited')
-        return redirect(url_for('showMenu',
-        food_truck_id=food_truck_id,
-        login_status =login_status,
-        login_username=login_username))
+        return redirect(url_for(
+            'showMenu',
+            food_truck_id=food_truck_id,
+            login_status=login_status,
+            login_username=login_username))
     else:
-        return render_template('editmenuitem.html',
-        food_truck_id=food_truck_id,
-        menu_id=menu_id,
-        item=editedItem,
-        login_status =login_status,
-        login_username=login_username)
-
+        return render_template(
+            'editmenuitem.html',
+            food_truck_id=food_truck_id,
+            menu_id=menu_id,
+            item=editedItem,
+            login_status=login_status,
+            login_username=login_username)
 
 # Delete a menu item
+
+
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/delete',
     methods=['GET', 'POST'])
@@ -554,31 +501,16 @@ def deleteMenuItem(food_truck_id, menu_id):
         session.delete(itemToDelete)
         session.commit()
         flash('Menu Item Successfully Deleted')
-        return redirect(url_for('showMenu',
-        food_truck_id=food_truck_id))
+        return redirect(url_for(
+            'showMenu',
+            food_truck_id=food_truck_id))
     else:
-        return render_template('deleteMenuItem.html',
-        item=itemToDelete,
-        login_status=login_status,
-        login_username=login_username,
-        food_truck=food_truck)
-
-
-@app.route('/test_jinja_if')
-def test_jinja_if():
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-    else:
-        login_status = "logged in"
-    print "login_status:"
-    print login_status
-    return render_template('test_jinja_if.html', login_status=login_status)
-
-
-@app.route('/test_html')
-def test_html():
-    return render_template('test_html.html')
+        return render_template(
+            'deleteMenuItem.html',
+            item=itemToDelete,
+            login_status=login_status,
+            login_username=login_username,
+            food_truck=food_truck)
 
 
 def getUserID(email):
