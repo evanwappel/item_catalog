@@ -56,25 +56,18 @@ user2 = User(
 session.add(user2)
 session.commit()
 
-user3 = User(
-    name="Evan Wappel",
-    email="ewappel@gmail.com",
-    picture="https://lh3.googleusercontent.com/\
--ndvjs1Gb1kg/AAAAAAAAAAI/AAAAAAAAAz0/b9l4UmgsXOw/photo.jpg")
-session.add(user3)
-session.commit()
 
-user4 = User(
+user3 = User(
     name="Roy Choi",
     email="roy_choi@gmail.com",
     picture="http://www.sfstation.com/wp-content/uploads/2013/11/roy-choi-riding-shotgun-la-son.jpg")
-session.add(user4)
+session.add(user3)
 session.commit()
 
 
 # El Jefe
 
-food_truck1 = FoodTruck(name="El Jefe", user_id=4)
+food_truck1 = FoodTruck(name="El Jefe", user_id=3)
 session.add(food_truck1)
 session.commit()
 
@@ -82,14 +75,14 @@ menuItem1 = MenuItem(
     name="Mojo Pork Cubanos",
     description="delectable Cuban-inspired variation on the classic ham and cheese sandwich",
     price="$10", course="Entree",
-    food_truck=food_truck1, user_id=4)
+    food_truck=food_truck1, user_id=3)
 session.add(menuItem1)
 session.commit()
 
 menuItem2 = MenuItem(
     name="Mojo Marinated Pork Shoulder",
     description="immersed in a marinade of garlic, citrus and herbs", price="$10",
-    course="Entree", food_truck=food_truck1, user_id=4)
+    course="Entree", food_truck=food_truck1, user_id=3)
 session.add(menuItem2)
 session.commit()
 
@@ -97,14 +90,14 @@ menuItem3 = MenuItem(
    name="Tostones with Chile Vinegar",
    description="fried plantain slices",
    price="$6", course="Appetizer", food_truck=food_truck1,
-   user_id=4)
+   user_id=3)
 session.add(menuItem3)
 session.commit()
 
 menuItem4 = MenuItem(
     name="Berries in Cream", description=" super-sweet recipe for berries with cream",
     price="$7", course="Dessert", food_truck=food_truck1,
-    user_id=4)
+    user_id=3)
 session.add(menuItem4)
 session.commit()
 
@@ -112,7 +105,7 @@ menuItem5 = MenuItem(
     name="Yucca Fries with Banana Ketchup",
     description="ripened bananas that are peeled and chopped",
     price="$7", course="Appetizer", food_truck=food_truck1,
-    user_id=4)
+    user_id=3)
 session.add(menuItem5)
 session.commit()
 
@@ -120,7 +113,7 @@ menuItem6 = MenuItem(
     name="Pasta Aglio E Olio",
     description="spaghetti and plantains",
     price="$7", course="Appetizer", food_truck=food_truck1,
-    user_id=4)
+    user_id=3)
 session.add(menuItem6)
 session.commit()
 
@@ -160,39 +153,39 @@ session.add(menuItem4)
 session.commit()
 
 
-# Evan's food truck
-food_truck3 = FoodTruck(
-    name="Evan's Food Truck", user_id=3)
-session.add(food_truck3)
-session.commit()
-
-menuItem1 = MenuItem(
-    name="NACHOS & SALSA", description="spicy salsa",
-    price="$4.50", course="Appetizer", food_truck=food_truck3,
-    user_id=3)
-session.add(menuItem1)
-session.commit()
-
-menuItem2 = MenuItem(
-    name="ENCHILADAS", description="special sauce",
-    price="$7.95", course="Entree", food_truck=food_truck3,
-    user_id=3)
-session.add(menuItem2)
-session.commit()
-
-menuItem3 = MenuItem(
-    name="CHOCOLATE CAKE", description="with ice cream",
-    price="$5", course="Dessert", food_truck=food_truck3,
-    user_id=3)
-session.add(menuItem3)
-session.commit()
-
-menuItem4 = MenuItem(
-    name="MEXICAN HOT CHOCOLATE", description="with cinnamon",
-    price="$5", course="Beverage", food_truck=food_truck3,
-    user_id=3)
-session.add(menuItem4)
-session.commit()
+# # Evan's food truck
+# food_truck3 = FoodTruck(
+#     name="Evan's Food Truck", user_id=3)
+# session.add(food_truck3)
+# session.commit()
+#
+# menuItem1 = MenuItem(
+#     name="NACHOS & SALSA", description="spicy salsa",
+#     price="$4.50", course="Appetizer", food_truck=food_truck3,
+#     user_id=3)
+# session.add(menuItem1)
+# session.commit()
+#
+# menuItem2 = MenuItem(
+#     name="ENCHILADAS", description="special sauce",
+#     price="$7.95", course="Entree", food_truck=food_truck3,
+#     user_id=3)
+# session.add(menuItem2)
+# session.commit()
+#
+# menuItem3 = MenuItem(
+#     name="CHOCOLATE CAKE", description="with ice cream",
+#     price="$5", course="Dessert", food_truck=food_truck3,
+#     user_id=3)
+# session.add(menuItem3)
+# session.commit()
+#
+# menuItem4 = MenuItem(
+#     name="MEXICAN HOT CHOCOLATE", description="with cinnamon",
+#     price="$5", course="Beverage", food_truck=food_truck3,
+#     user_id=3)
+# session.add(menuItem4)
+# session.commit()
 
 
 #  Jovencio's Food Truck

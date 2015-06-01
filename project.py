@@ -98,7 +98,8 @@ def fbconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 100px; height: 100px;border-radius: 50px;-webkit-border-radius: 50px;-moz-border-radius: 50px;"> '
+
 
     flash("Now logged in as %s" % login_session['username'])
     return output
@@ -207,19 +208,12 @@ def gconnect():
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
+
     output += '!</h1>'
-
-    output += '<h3>picture url='
-    output += login_session['picture']
-    output += '!</h3>'
-
     output += '<img src="'
     output += login_session['picture']
-    # dimensions of the picture at login:
-    output += ' " style = "width: 300px; height: \
-        300px;border-radius: \
-        50px;-webkit-border-radius: \
-        150px;-moz-border-radius: 50px;"> '
+    output += ' " style = "width: 100px; height: 100px;border-radius: 50px;-webkit-border-radius: 50px;-moz-border-radius: 50px;"> '
+
     flash("you are now logged in as %s" % login_session['username'])
     return output
 
