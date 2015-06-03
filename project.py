@@ -13,6 +13,8 @@ import httplib2
 import json
 import random
 import string
+
+
 app = Flask(__name__)
 
 CLIENT_ID = json.loads(
@@ -28,6 +30,7 @@ session = DBSession()
 # Create a state token to prevent request forgery.
 # Store it in the session for later validation
 
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -36,6 +39,7 @@ def login_required(f):
             return redirect(url_for('showLogin'))
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.route('/login')
 def showLogin():
@@ -221,8 +225,6 @@ def showFoodTrucks():
         credentials=credentials)
 
 
-
-
 @app.route('/food_truck/new/', methods=['GET', 'POST'])
 @login_required
 def newFoodTruck():
@@ -266,9 +268,6 @@ def editFoodTruck(food_truck_id):
             flash('Food Truck Successfully Edited %s' % editedFoodTruck.name)
             session.add(editedFoodTruck)
             session.commit()
-            print "this loop"
-            print "request.form['name']="
-            print request.form['name']
             return redirect(url_for('showFoodTrucks'))
     else:
         return render_template(
@@ -475,8 +474,6 @@ def createUser(login_session):
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
-
-
 
 
 if __name__ == '__main__':
