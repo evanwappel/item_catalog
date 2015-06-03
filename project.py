@@ -3,10 +3,11 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, FoodTruck, MenuItem, User
 from flask import session as login_session
 from flask import make_response, jsonify, url_for, flash
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, g
 from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from functools import wraps
 import requests
 import httplib2
 import json
@@ -27,6 +28,14 @@ session = DBSession()
 # Create a state token to prevent request forgery.
 # Store it in the session for later validation
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        credentials = login_session.get('credentials')
+        if credentials is None:
+            return redirect(url_for('showLogin'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/login')
 def showLogin():
@@ -212,7 +221,10 @@ def showFoodTrucks():
         credentials=credentials)
 
 
+
+
 @app.route('/food_truck/new/', methods=['GET', 'POST'])
+@login_required
 def newFoodTruck():
     """ Create a new food truck """
 
@@ -232,6 +244,7 @@ def newFoodTruck():
 
 
 @app.route('/food_truck/<int:food_truck_id>/edit/', methods=['GET', 'POST'])
+@login_required
 def editFoodTruck(food_truck_id):
     """ Edit a food Truck """
 
@@ -265,6 +278,7 @@ def editFoodTruck(food_truck_id):
 
 
 @app.route('/food_truck/<int:food_truck_id>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteFoodTruck(food_truck_id):
     """ Delete a food_truck """
 
@@ -320,6 +334,7 @@ def showMenu(food_truck_id):
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/new/',
     methods=['GET', 'POST'])
+@login_required
 def newMenuItem(food_truck_id):
     """ Create a new menu item """
 
@@ -356,6 +371,7 @@ def newMenuItem(food_truck_id):
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/edit',
     methods=['GET', 'POST'])
+@login_required
 def editMenuItem(food_truck_id, menu_id):
     """ Edit a menu item """
 
@@ -404,6 +420,7 @@ def editMenuItem(food_truck_id, menu_id):
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/delete',
     methods=['GET', 'POST'])
+@login_required
 def deleteMenuItem(food_truck_id, menu_id):
     """ Delete a menu item """
 
@@ -458,6 +475,9 @@ def createUser(login_session):
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
+
+
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
