@@ -13,21 +13,22 @@
 
 <div>
 
-	{% if login_status=="logged in" %}
+{% if credentials != None %}
 	<div>
-	Logged in as {{login_username}}
-</div>
-	<a href="{{url_for('gdisconnect')}}">
+		Logged in as {{session.username}}
+	</div>
+
+		<a href="{{url_for('gdisconnect')}}">
 		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Logout
+		</a>
 
-	</a>
-	{% else %}
-	<a href="{{url_for('showLogin')}}">
+{% else %}
+		<a href="{{url_for('showLogin')}}">
 		<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Login
-	</a>
+		</a>
 
 
-	{% endif %}
+{% endif %}
 
 
 

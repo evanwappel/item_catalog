@@ -1,5 +1,6 @@
 {% extends "main.html" %}
 {% block content %}
+
 {% include "header.html" %}
 	<div class="row top-menu">
 		<div class="col-md-10"></div>
@@ -34,7 +35,8 @@
 
 </div>
 
-{% if login_status=="logged in" %}
+
+{% if credentials != None %}
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-none">
@@ -46,7 +48,9 @@
 		</div>
 		<div class="col-md-1"></div>
 	</div>
-	{% endif %}
+{% endif %}
+
+
 
 
 	{% for food_truck in food_trucks %}
@@ -60,4 +64,5 @@
 			</div>
 		</a>
 	{% endfor %}
+
 {% endblock %}

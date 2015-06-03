@@ -40,17 +40,17 @@ def showLogin():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    print 'received state of %s' % request.args.get('state')
-    print 'login_sesion["state"] = %s' % login_session['state']
+    """ CONNECT:
+
+    Use Oauth to allow the user to login with Google account """
+
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
 
     gplus_id = request.args.get('gplus_id')
-    print "request.args.get('gplus_id') = %s" % request.args.get('gplus_id')
     code = request.data
-    print "received code of %s " % code
 
     try:
         # Upgrade the authorization code into a credentials object
@@ -107,7 +107,6 @@ def gconnect():
     login_session['gplus_id'] = gplus_id
     response = make_response(json.dumps('Successfully connected user.', 200))
 
-    print "#Get user info"
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
@@ -118,7 +117,6 @@ def gconnect():
     login_session['username'] = data["name"]
     login_session['picture'] = data["picture"]
     login_session['email'] = data["email"]
-    print login_session['email']
 
     # see if user exists, if it doesn't make a new one
     user_id = getUserID(data["email"])
@@ -141,12 +139,15 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     return output
 
-# DISCONNECT - Revoke a current user's token and reset their login_session
-
 
 @app.route("/gdisconnect")
 def gdisconnect():
-    # Only disconnect a connected user.
+    """ DISCONNECT:
+
+    Revoke a current user's token and reset their login_session.
+    Only disconnect a connected user.
+
+    """
     credentials = login_session.get('credentials')
     if credentials is None:
         response = make_response(json.dumps(
@@ -198,46 +199,25 @@ def food_trucksJSON():
     return jsonify(food_trucks=[r.serialize for r in food_trucks])
 
 
-# Show all food trucks
 @app.route('/')
 @app.route('/food_truck/')
 def showFoodTrucks():
+    """ Show all food trucks """
+
     food_trucks = session.query(FoodTruck).order_by(asc(FoodTruck.name))
-
     credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
-
     return render_template(
         'food_trucks.html',
         food_trucks=food_trucks,
-        login_status=login_status,
-        login_user_id=login_user_id,
-        login_username=login_username
-        )
+        credentials=credentials)
 
 
-# Create a new food truck
 @app.route('/food_truck/new/', methods=['GET', 'POST'])
 def newFoodTruck():
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
+    """ Create a new food truck """
 
-    print "login_username="
-    print login_username
+    credentials = login_session.get('credentials')
+
     if request.method == 'POST':
         login_user_id = getUserID(login_session['email'])
         newFoodTruck = FoodTruck(
@@ -248,23 +228,14 @@ def newFoodTruck():
         return redirect(url_for('showFoodTrucks'))
     else:
         return render_template(
-            'newFoodTruck.html',
-            login_username=login_username,
-            login_status=login_status)
+            'newFoodTruck.html', credentials=credentials)
 
 
-# Edit a food Truck
 @app.route('/food_truck/<int:food_truck_id>/edit/', methods=['GET', 'POST'])
 def editFoodTruck(food_truck_id):
+    """ Edit a food Truck """
+
     credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
 
     editedFoodTruck = session.query(FoodTruck).filter_by(
         id=food_truck_id).one()
@@ -290,32 +261,21 @@ def editFoodTruck(food_truck_id):
         return render_template(
             'editFoodTruck.html',
             food_truck=editedFoodTruck,
-            login_username=login_username,
-            login_status=login_status)
+            credentials=credentials)
 
 
-# Delete a food_truck
 @app.route('/food_truck/<int:food_truck_id>/delete/', methods=['GET', 'POST'])
 def deleteFoodTruck(food_truck_id):
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
+    """ Delete a food_truck """
 
+    credentials = login_session.get('credentials')
     food_truckToDelete = session.query(FoodTruck).filter_by(
         id=food_truck_id).one()
-    print "truck:"
-    print food_truckToDelete.user_id
-    print "user_id:"
-    print login_user_id
 
     if request.method == 'POST':
         session.delete(food_truckToDelete)
+        # also delete menu items from the truck being deleted:
+        session.query(MenuItem).filter_by(food_truck_id=food_truck_id).delete()
         flash('%s Successfully Deleted' % food_truckToDelete.name)
         session.commit()
         return redirect(url_for(
@@ -324,71 +284,49 @@ def deleteFoodTruck(food_truck_id):
         return render_template(
             'deleteFoodTruck.html',
             food_truck=food_truckToDelete,
-            login_status=login_status,
-            login_username=login_username)
+            credentials=credentials)
         return redirect(url_for(
             'showFoodTrucks',
-            food_truck_id=food_truck_id))
+            food_truck_id=food_truck_id,
+            credentials=credentials))
 
 
-# Show a food_truck menu
 @app.route('/food_truck/<int:food_truck_id>/')
 @app.route('/food_truck/<int:food_truck_id>/menu/')
 def showMenu(food_truck_id):
     items = session.query(MenuItem).filter_by(
         food_truck_id=food_truck_id).all()
+    """ Show a food_truck menu """
 
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
     creator_id = food_truck.user_id
-    print "creator_id="
-    print creator_id
-
     creator_user = session.query(User).filter_by(id=creator_id).one()
     creator_name = creator_user.name
-    print "creator_name="
-    print creator_name
     creator_picture = creator_user.picture
-    print "creator_picture="
-    print creator_picture
-
     credentials = login_session.get('credentials')
 
     if credentials is None:
-        login_status = "not logged in"
         login_user_id = 0
-        login_username = "no username"
     else:
-        login_status = "logged in"
         login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
 
     return render_template(
         'menu.html', items=items, food_truck=food_truck,
         creator_name=creator_name, creator_picture=creator_picture,
-        login_status=login_status, login_user_id=login_user_id,
-        login_username=login_username, creator_id=creator_id
-        )
-
-# Create a new menu item
+        login_user_id=login_user_id, credentials=credentials,
+        creator_id=creator_id)
 
 
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/new/',
     methods=['GET', 'POST'])
 def newMenuItem(food_truck_id):
+    """ Create a new menu item """
+
+    credentials = login_session.get('credentials')
     if 'username' not in login_session:
         return redirect('/login')
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
-
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
 
     if login_session['user_id'] != food_truck.user_id:
         return "<script>function myFunction() {alert( \
@@ -408,23 +346,19 @@ def newMenuItem(food_truck_id):
         flash('New Menu %s Item Successfully Created' % (newItem.name))
         return redirect(url_for(
             'showMenu',
-            food_truck_id=food_truck_id,
-            login_status=login_status,
-            login_username=login_username))
+            food_truck_id=food_truck_id))
     else:
         return render_template(
             'newmenuitem.html',
-            food_truck_id=food_truck_id,
-            login_status=login_status,
-            login_username=login_username)
-
-# Edit a menu item
+            food_truck_id=food_truck_id, credentials=credentials)
 
 
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/edit',
     methods=['GET', 'POST'])
 def editMenuItem(food_truck_id, menu_id):
+    """ Edit a menu item """
+
     credentials = login_session.get('credentials')
     if credentials is None:
         login_status = "not logged in"
@@ -434,6 +368,7 @@ def editMenuItem(food_truck_id, menu_id):
         login_status = "logged in"
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
+
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -458,25 +393,20 @@ def editMenuItem(food_truck_id, menu_id):
         flash('Menu Item Successfully Edited')
         return redirect(url_for(
             'showMenu',
-            food_truck_id=food_truck_id,
-            login_status=login_status,
-            login_username=login_username))
-    else:
+            food_truck_id=food_truck_id))
         return render_template(
             'editmenuitem.html',
             food_truck_id=food_truck_id,
-            menu_id=menu_id,
-            item=editedItem,
-            login_status=login_status,
-            login_username=login_username)
-
-# Delete a menu item
+            menu_id=menu_id, credentials=credentials,
+            item=editedItem)
 
 
 @app.route(
     '/food_truck/<int:food_truck_id>/menu/<int:menu_id>/delete',
     methods=['GET', 'POST'])
 def deleteMenuItem(food_truck_id, menu_id):
+    """ Delete a menu item """
+
     credentials = login_session.get('credentials')
     if credentials is None:
         login_status = "not logged in"
@@ -487,15 +417,8 @@ def deleteMenuItem(food_truck_id, menu_id):
         login_user_id = getUserID(login_session['email'])
         login_username = login_session['username']
 
-    print "menu_id="
-    print menu_id
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
-    print "food_truck="
-    print food_truck
-
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
-    print "itemToDelete="
-    print itemToDelete
 
     if request.method == 'POST':
         session.delete(itemToDelete)
@@ -510,7 +433,7 @@ def deleteMenuItem(food_truck_id, menu_id):
             item=itemToDelete,
             login_status=login_status,
             login_username=login_username,
-            food_truck=food_truck)
+            food_truck=food_truck, credentials=credentials)
 
 
 def getUserID(email):
