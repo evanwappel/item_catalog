@@ -125,8 +125,6 @@ def gconnect():
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
-    login_session['credentials'] = credentials
-    login_session['gplus_id'] = gplus_id
     login_session['username'] = data["name"]
     login_session['picture'] = data["picture"]
     login_session['email'] = data["email"]
@@ -150,6 +148,7 @@ def gconnect():
         50px;-moz-border-radius: 50px;"> '
 
     flash("you are now logged in as %s" % login_session['username'])
+
     return output
 
 
@@ -375,19 +374,12 @@ def editMenuItem(food_truck_id, menu_id):
     """ Edit a menu item """
 
     credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
 
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
+
     if login_session['user_id'] != food_truck.user_id:
         return "<script>function myFunction() {alert(\
         'You are not authorized to edit menu items to\
@@ -409,6 +401,7 @@ def editMenuItem(food_truck_id, menu_id):
         return redirect(url_for(
             'showMenu',
             food_truck_id=food_truck_id))
+    else:
         return render_template(
             'editmenuitem.html',
             food_truck_id=food_truck_id,
@@ -424,14 +417,6 @@ def deleteMenuItem(food_truck_id, menu_id):
     """ Delete a menu item """
 
     credentials = login_session.get('credentials')
-    if credentials is None:
-        login_status = "not logged in"
-        login_user_id = 0
-        login_username = "no username"
-    else:
-        login_status = "logged in"
-        login_user_id = getUserID(login_session['email'])
-        login_username = login_session['username']
 
     food_truck = session.query(FoodTruck).filter_by(id=food_truck_id).one()
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -447,8 +432,6 @@ def deleteMenuItem(food_truck_id, menu_id):
         return render_template(
             'deleteMenuItem.html',
             item=itemToDelete,
-            login_status=login_status,
-            login_username=login_username,
             food_truck=food_truck, credentials=credentials)
 
 

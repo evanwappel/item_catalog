@@ -7,7 +7,7 @@ Starter Code for Auth&amp;Auth course
 
 **Note: If you already have a vagrant machine installed from previous Udacity courses skip to the 'Fetch the Source Code and VM Configuration' section**
 
-In Lessons 2,3 and 4 of this course, you'll use a virtual machine (VM) to run a web server and a web app that uses it. The VM is a Linux system that runs on top of your own machine.  You can share files easily between your computer and the VM.
+You'll use a virtual machine (VM) to run a web server and a web app that uses it. The VM is a Linux system that runs on top of your own machine.  You can share files easily between your computer and the VM.
 
 We're using the Vagrant software to configure and manage the VM. Here are the tools you'll need to install to get it running:
 
@@ -46,6 +46,25 @@ This will give you a directory named **item_catalog** complete with the source c
 ## Run the virtual machine!
 
 Using the terminal, change directory to item_catalog (**cd item_catalog**), then type **vagrant up** to launch your virtual machine.
+
+
+## OAUTH
+In order to connect with google, you will need to create a project in: https://console.developers.google.com/
+
+Click on 'Create Project' and call your project 'Food Truck Menu Application'.
+
+From the Project dashboard, click 'APIs & auth' from the menu on the left, the select 'Credentials'.
+
+In the 'OAuth' section, click 'Create new Client ID'. (make sure Web application is selected, then click 'Configure consent screen')
+
+You need to specify at least an email and product name. (Food Truck Menu Application)
+
+Save changes, click 'client id'. Click 'edit settings'. In authorized javascript origins, add http://localhost:5000 then click 'update'
+
+Click on ``` download json ``` to download the json file, call it client_secrets.json and store it in your main project folder.
+
+In login.html give the client id to
+  data-clientid = "YOU_CLIENT_ID"
 
 
 ## Running the Food Truck Menu App

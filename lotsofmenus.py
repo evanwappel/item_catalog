@@ -157,41 +157,6 @@ session.add(menuItem4)
 session.commit()
 
 
-# # Evan's food truck
-# food_truck3 = FoodTruck(
-#     name="Evan's Food Truck", user_id=3)
-# session.add(food_truck3)
-# session.commit()
-#
-# menuItem1 = MenuItem(
-#     name="NACHOS & SALSA", description="spicy salsa",
-#     price="$4.50", course="Appetizer", food_truck=food_truck3,
-#     user_id=3)
-# session.add(menuItem1)
-# session.commit()
-#
-# menuItem2 = MenuItem(
-#     name="ENCHILADAS", description="special sauce",
-#     price="$7.95", course="Entree", food_truck=food_truck3,
-#     user_id=3)
-# session.add(menuItem2)
-# session.commit()
-#
-# menuItem3 = MenuItem(
-#     name="CHOCOLATE CAKE", description="with ice cream",
-#     price="$5", course="Dessert", food_truck=food_truck3,
-#     user_id=3)
-# session.add(menuItem3)
-# session.commit()
-#
-# menuItem4 = MenuItem(
-#     name="MEXICAN HOT CHOCOLATE", description="with cinnamon",
-#     price="$5", course="Beverage", food_truck=food_truck3,
-#     user_id=3)
-# session.add(menuItem4)
-# session.commit()
-
-
 #  Jovencio's Food Truck
 
 food_truck4 = FoodTruck(name="Jovencio's Food Truck", user_id=1)
