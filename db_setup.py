@@ -4,12 +4,22 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
 
-Base = declarative_base()
+engine = create_engine("postgres://localhost/mydb")
+if not database_exists(engine.url):
+	create_database(engine.url)
+
+print(database_exists(engine.url)
+
+
+
+
+#Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'user_list'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -22,7 +32,7 @@ class FoodTruck(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user_list.id'))
     user = relationship(User)
 
     @property
@@ -44,7 +54,7 @@ class MenuItem(Base):
     course = Column(String(250))
     food_truck_id = Column(Integer, ForeignKey('food_truck.id'))
     food_truck = relationship(FoodTruck)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user_list.id'))
     user = relationship(User)
 
     @property
@@ -58,6 +68,6 @@ class MenuItem(Base):
             'course': self.course,
             }
 
-engine = create_engine('sqlite:///food_truck_database.db')
+#engine = create_engine('postgresql://postgres:postgres@52.24.210.121:80/food_truck_db')
 
 Base.metadata.create_all(engine)
